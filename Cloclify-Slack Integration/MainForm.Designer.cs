@@ -1,6 +1,6 @@
 ﻿namespace Cloclify_Slack_Integration
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.

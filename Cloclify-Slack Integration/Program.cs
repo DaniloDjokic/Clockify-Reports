@@ -16,7 +16,10 @@ namespace Cloclify_Slack_Integration
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            IStartupKeyManager startupKeyManager = new StartupKeyManager();
+
+            Application.Run(new MainForm(startupKeyManager));
         }
     }
 }
