@@ -9,6 +9,7 @@ namespace Cloclify_Slack_Integration
     public interface IStartupKeyManager
     {
         bool InitializeApiKey();
+        bool WriteApiKey(string apiKey);
         string ApiKey { get; }
     }
 }

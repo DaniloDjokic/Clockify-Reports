@@ -9,7 +9,7 @@ namespace Cloclify_Slack_Integration
 {
     public class StartupKeyManager : IStartupKeyManager
     {
-        private string fileName = "Key.bin";
+        private string fileName = "Key.dat";
 
         private string apiKey;
         public string ApiKey { get { return this.apiKey; } }
@@ -27,6 +27,23 @@ namespace Cloclify_Slack_Integration
 
                 if (apiKey == null)
                     return false;
+
+                return true;
+            }
+            catch(Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool WriteApiKey(string apiKey)
+        {
+            try
+            {
+                using (BinaryWriter bw = new BinaryWriter(File.Open(fileName, FileMode.OpenOrCreate)))
+                {
+                    bw.Write(apiKey);
+                }
 
                 return true;
             }

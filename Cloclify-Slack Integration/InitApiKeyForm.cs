@@ -13,12 +13,19 @@ namespace Cloclify_Slack_Integration
 {
     public partial class InitApiKeyForm : Form
     {
-        HttpClient c = new HttpClient();
+        MainForm mainForm;
+        IStartupKeyManager startupKeyManager;
+        ClockifyService clockifyService;
+        bool isApiKeyConfigured;
 
-        public InitApiKeyForm()
+        public InitApiKeyForm(MainForm mainForm, IStartupKeyManager startupKeyManager, ClockifyService clockifyService)
         {
             InitializeComponent();
-            c.BaseAddress = new Uri("https://api.clockify.me/api/v1/");
+
+            this.mainForm = mainForm;
+            this.startupKeyManager = startupKeyManager;
+            this.clockifyService = clockifyService;
+            isApiKeyConfigured = false;
         }
 
         private void richTextBox1_LinkClicked(object sender, LinkClickedEventArgs e)
@@ -29,12 +36,26 @@ namespace Cloclify_Slack_Integration
         private async void confirmButton_Click(object sender, EventArgs e)
         {
             string apiKey = keyInputTextBox.Text;
+            isApiKeyConfigured = await clockifyService.ConfigureApiKey(apiKey);
 
-            c.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
+            bool writeRes = startupKeyManager.WriteApiKey(apiKey);
 
-            HttpResponseMessage m = await c.GetAsync("user");
+            if(writeRes)
+                await this.LoginUser();
+        }
 
-            string res = await m.Content.ReadAsStringAsync();
+        private async Task LoginUser()
+        {
+            string username = await this.clockifyService.GetUserName();
+
+            mainForm.DisplayUser(username);
+            this.Close();
+        }
+
+        private void InitApiKeyForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!this.isApiKeyConfigured)
+                Application.Exit();
         }
     }
 }

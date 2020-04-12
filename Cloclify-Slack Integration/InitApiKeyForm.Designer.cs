@@ -69,12 +69,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(510, 327);
-            this.ControlBox = false;
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.confirmButton);
             this.Controls.Add(this.keyInputTextBox);
             this.Name = "InitApiKeyForm";
             this.Text = "InitApiKeyForm";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.InitApiKeyForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

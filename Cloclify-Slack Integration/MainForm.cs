@@ -16,12 +16,16 @@ namespace Cloclify_Slack_Integration
         IStartupKeyManager startupKeyManager;
         InitApiKeyForm initApiKeyForm;
 
-        public MainForm(IStartupKeyManager startupKeyManager)
+        ClockifyService clockifyService;
+
+        string welcomeMessage = "Hello ";
+
+        public MainForm(IStartupKeyManager startupKeyManager, ClockifyService clockifyService)
         {
             InitializeComponent();
 
             this.startupKeyManager = startupKeyManager;
-            initApiKeyForm = new InitApiKeyForm();
+            initApiKeyForm = new InitApiKeyForm(this, startupKeyManager, clockifyService);
 
             InitApiKey();
         }
@@ -33,6 +37,11 @@ namespace Cloclify_Slack_Integration
             {
                 initApiKeyForm.ShowDialog();
             }
+        }
+
+        public void DisplayUser(string username)
+        {
+            this.usernameLabel.Text = this.welcomeMessage + username;
         }
 
         private void button1_Click(object sender, EventArgs e)
