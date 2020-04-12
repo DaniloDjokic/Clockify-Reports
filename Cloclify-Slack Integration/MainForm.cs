@@ -15,7 +15,6 @@ namespace Cloclify_Slack_Integration
     {
         IStartupKeyManager startupKeyManager;
         InitApiKeyForm initApiKeyForm;
-
         ClockifyService clockifyService;
 
         string welcomeMessage = "Hello ";
@@ -25,18 +24,45 @@ namespace Cloclify_Slack_Integration
             InitializeComponent();
 
             this.startupKeyManager = startupKeyManager;
+            this.clockifyService = clockifyService;
+
             initApiKeyForm = new InitApiKeyForm(this, startupKeyManager, clockifyService);
 
-            InitApiKey();
+            Task.Run(() => InitFormDisplay()).Wait();
         }
 
-        private void InitApiKey()
+        private async Task InitFormDisplay()
         {
             bool isKeyInitialized = startupKeyManager.InitializeApiKey();
             if (!isKeyInitialized)
             {
                 initApiKeyForm.ShowDialog();
             }
+            else
+            {
+                await DisplayConfiguredKey();
+            }
+        }
+
+        private async Task DisplayConfiguredKey()
+        {
+            this.clockifyService.InitApiKey(this.startupKeyManager.ApiKey);
+
+            await GetUserDataParallelAsync();
+        }
+
+        private async Task GetUserDataParallelAsync()
+        {
+            Task<string> usernameTask = Task.Run(() => this.clockifyService.GetUserName());
+            Task<List<Workspace>> workspacesTask = Task.Run(() => this.clockifyService.GetWorkspaces());
+
+            await Task.WhenAll(usernameTask, workspacesTask);
+
+            string username = usernameTask.Result;
+            List<Workspace> workspaces = workspacesTask.Result;
+
+            DisplayUser(username);
+            DisplayWorkspaces(workspaces);
         }
 
         public void DisplayUser(string username)
@@ -44,9 +70,36 @@ namespace Cloclify_Slack_Integration
             this.usernameLabel.Text = this.welcomeMessage + username;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        public void DisplayWorkspaces(List<Workspace> workspaces)
         {
-            
+            this.workspacesDropdown.DataSource = workspaces;
+            this.workspacesDropdown.SelectedIndex = 0;
+        }
+
+        private async void getRecordsButton_Click(object sender, EventArgs e)
+        {
+            bool isPathInitialized = true; // this.savePathTextBox.Text != "";
+            bool isDateLessThanNow = this.datePicker.Value.Date <= DateTime.Now.Date;
+
+            if (isPathInitialized && isDateLessThanNow)
+            {
+                Workspace workspace = this.workspacesDropdown.SelectedItem as Workspace;
+
+                List<TimeEntry> timeEntries = await this.clockifyService.GetRecord(workspace);
+            }
+            else
+            {
+                DisplayInputErrors(isPathInitialized, isDateLessThanNow);
+            }
+        }
+
+        private void DisplayInputErrors(bool isPathInitialized, bool isDateLessThanNow)
+        {
+            if (!isPathInitialized)
+                errorProvider.SetError(this.savePathTextBox, "A folder must be selected ");
+
+            if (!isDateLessThanNow)
+                errorProvider.SetError(this.selectFolderButton, "Date cannot be after current one ");
         }
     }
 }

@@ -46,9 +46,17 @@ namespace Cloclify_Slack_Integration
 
         private async Task LoginUser()
         {
-            string username = await this.clockifyService.GetUserName();
+            Task<string> usernameTask = Task.Run(() => this.clockifyService.GetUserName());
+            Task<List<Workspace>> workspacesTask = Task.Run(() => this.clockifyService.GetWorkspaces());
+
+            await Task.WhenAll(usernameTask, workspacesTask);
+
+            string username = usernameTask.Result;
+            List<Workspace> workspaces = workspacesTask.Result;
 
             mainForm.DisplayUser(username);
+            mainForm.DisplayWorkspaces(workspaces);
+
             this.Close();
         }
 

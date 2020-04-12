@@ -38,7 +38,7 @@ namespace Cloclify_Slack_Integration
             if(responseMessage.IsSuccessStatusCode)
                 return await responseMessage.Content.ReadAsStringAsync();
 
-            throw new HttpRequestException();
+            throw new HttpRequestException(responseMessage.StatusCode.ToString());
         }
 
         private string CreateRoute(string endpoint, Dictionary<string, string> queryParams)
