@@ -71,12 +71,18 @@ namespace Cloclify_Slack_Integration
             }
         }
 
-        public async Task<List<TimeEntry>> GetRecord(Workspace workspace)
+        public async Task<List<TimeEntry>> GetRecord(Workspace workspace, DateTime startDate)
         {
             try
             {
+                string formatedDate = startDate.ToString("yyyy-MM-dd");
+                formatedDate += "T00:00:00Z";
                 string endpoint = $"workspaces/{workspace.Id}/user/{this.user.Id}/time-entries";
-                string stringResult = await this.webClient.SendRequest("GET", endpoint);
+
+                Dictionary<string, string> queryParams = new Dictionary<string, string>(); ;
+                queryParams["start"] = formatedDate;
+
+                string stringResult = await this.webClient.SendRequest("GET", endpoint, null, queryParams);
                 List<TimeEntry> timeEntries = JsonConvert.DeserializeObject<List<TimeEntry>>(stringResult);
 
                 return timeEntries;

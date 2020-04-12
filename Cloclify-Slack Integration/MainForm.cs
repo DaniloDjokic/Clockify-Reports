@@ -79,13 +79,15 @@ namespace Cloclify_Slack_Integration
         private async void getRecordsButton_Click(object sender, EventArgs e)
         {
             bool isPathInitialized = true; // this.savePathTextBox.Text != "";
-            bool isDateLessThanNow = this.datePicker.Value.Date <= DateTime.Now.Date;
+            bool isDateLessThanNow = this.datePicker.Value.Date < DateTime.Now.Date;
 
             if (isPathInitialized && isDateLessThanNow)
             {
                 Workspace workspace = this.workspacesDropdown.SelectedItem as Workspace;
-
-                List<TimeEntry> timeEntries = await this.clockifyService.GetRecord(workspace);
+                DateTime startDate = this.datePicker.Value.Date;
+                
+                List<TimeEntry> timeEntries = await this.clockifyService.GetRecord(workspace, startDate);
+                CalculateTotalTime(timeEntries);
             }
             else
             {
@@ -93,13 +95,87 @@ namespace Cloclify_Slack_Integration
             }
         }
 
+        private void CalculateTotalTime(List<TimeEntry> timeEntries)
+        {
+            TimeSpan totalTime = new TimeSpan(0, 0, 0);
+
+            foreach(TimeEntry entry in timeEntries)
+            {
+                TimeSpan time = ConvertDurationToDateTime(entry.TimeInterval.Duration);
+                totalTime += time;
+            }
+
+            string x = "dsa";
+        }
+
+        private TimeSpan ConvertDurationToDateTime(string duration)
+        {
+            string durationSubstring = duration.Substring(2);
+
+            bool containsHour = false;
+            bool containsMinute = false;
+
+            int hours = 0, minutes = 0, seconds = 0;
+
+            if (durationSubstring.Contains("H"))
+            {
+                containsHour = true;
+                hours = Int32.Parse(durationSubstring.Substring(0, durationSubstring.IndexOf('H')));
+            }
+            if (durationSubstring.Contains("M"))
+            {
+                containsMinute = true;
+
+                if (containsHour)
+                {
+                    minutes = GetSubstringDigits(durationSubstring, 'H', 'M');
+                }
+                else
+                    minutes = Int32.Parse(durationSubstring.Substring(0, durationSubstring.IndexOf('M')));
+            }
+            if (durationSubstring.Contains("S"))
+            {
+                if (containsMinute)
+                {
+                    seconds = GetSubstringDigits(durationSubstring, 'M', 'S');
+                }
+                else if (containsHour)
+                {
+                    seconds = GetSubstringDigits(durationSubstring, 'H', 'S');
+                }
+                else
+                    seconds = Int32.Parse(durationSubstring.Substring(0, durationSubstring.IndexOf('S')));
+            }
+
+
+            string[] timeValues = durationSubstring.Split('H', 'M', 'S');
+
+            TimeSpan timeSpan = new TimeSpan(hours, minutes, seconds);
+
+            return timeSpan;
+        }
+
+        private int GetSubstringDigits(string inputString, char leftBoundry, char rightBoundry)
+        {
+            int digits;
+
+            bool isSingleDigit = inputString.IndexOf(rightBoundry) - inputString.IndexOf(leftBoundry) == 1;
+
+            if (isSingleDigit)
+                digits = Int32.Parse(inputString.Substring(inputString.IndexOf(leftBoundry) + 1, 1));
+            else
+                digits = Int32.Parse(inputString.Substring(inputString.IndexOf(leftBoundry) + 1, 2));
+
+            return digits;
+        }
+
         private void DisplayInputErrors(bool isPathInitialized, bool isDateLessThanNow)
         {
             if (!isPathInitialized)
-                errorProvider.SetError(this.savePathTextBox, "A folder must be selected ");
+                errorProvider.SetError(this.selectFolderButton, "A folder must be selected ");
 
             if (!isDateLessThanNow)
-                errorProvider.SetError(this.selectFolderButton, "Date cannot be after current one ");
+                errorProvider.SetError(this.datePicker, "Date cannot be after current one ");
         }
     }
 }
