@@ -35,20 +35,25 @@
             this.savePathTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.selectFolderButton = new System.Windows.Forms.Button();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.workspacesDropdown = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.folderDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.allProjectsListBox = new System.Windows.Forms.ListBox();
+            this.selectedProjectsListBox = new System.Windows.Forms.ListBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.statusLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // getRecordsButton
             // 
             this.getRecordsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.getRecordsButton.Location = new System.Drawing.Point(136, 388);
+            this.getRecordsButton.Location = new System.Drawing.Point(12, 403);
             this.getRecordsButton.Name = "getRecordsButton";
-            this.getRecordsButton.Size = new System.Drawing.Size(250, 71);
+            this.getRecordsButton.Size = new System.Drawing.Size(169, 71);
             this.getRecordsButton.TabIndex = 0;
             this.getRecordsButton.Text = "Get Records";
             this.getRecordsButton.UseVisualStyleBackColor = true;
@@ -66,14 +71,14 @@
             // 
             // datePicker
             // 
-            this.datePicker.Location = new System.Drawing.Point(136, 296);
+            this.datePicker.Location = new System.Drawing.Point(136, 115);
             this.datePicker.Name = "datePicker";
             this.datePicker.Size = new System.Drawing.Size(250, 20);
             this.datePicker.TabIndex = 2;
             // 
             // savePathTextBox
             // 
-            this.savePathTextBox.Location = new System.Drawing.Point(136, 338);
+            this.savePathTextBox.Location = new System.Drawing.Point(136, 157);
             this.savePathTextBox.Name = "savePathTextBox";
             this.savePathTextBox.ReadOnly = true;
             this.savePathTextBox.Size = new System.Drawing.Size(214, 20);
@@ -83,7 +88,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(14, 295);
+            this.label1.Location = new System.Drawing.Point(14, 114);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(44, 20);
             this.label1.TabIndex = 4;
@@ -93,7 +98,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(14, 338);
+            this.label2.Location = new System.Drawing.Point(14, 157);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(81, 20);
             this.label2.TabIndex = 5;
@@ -103,11 +108,12 @@
             // 
             this.selectFolderButton.BackgroundImage = global::Cloclify_Slack_Integration.Properties.Resources.folder_512;
             this.selectFolderButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.selectFolderButton.Location = new System.Drawing.Point(356, 338);
+            this.selectFolderButton.Location = new System.Drawing.Point(356, 157);
             this.selectFolderButton.Name = "selectFolderButton";
             this.selectFolderButton.Size = new System.Drawing.Size(30, 20);
             this.selectFolderButton.TabIndex = 6;
             this.selectFolderButton.UseVisualStyleBackColor = true;
+            this.selectFolderButton.Click += new System.EventHandler(this.selectFolderButton_Click);
             // 
             // errorProvider
             // 
@@ -116,7 +122,7 @@
             // workspacesDropdown
             // 
             this.workspacesDropdown.FormattingEnabled = true;
-            this.workspacesDropdown.Location = new System.Drawing.Point(136, 252);
+            this.workspacesDropdown.Location = new System.Drawing.Point(136, 71);
             this.workspacesDropdown.Name = "workspacesDropdown";
             this.workspacesDropdown.Size = new System.Drawing.Size(250, 21);
             this.workspacesDropdown.TabIndex = 7;
@@ -125,18 +131,69 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(14, 250);
+            this.label3.Location = new System.Drawing.Point(14, 69);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(89, 20);
             this.label3.TabIndex = 8;
             this.label3.Text = "Workspace";
+            // 
+            // allProjectsListBox
+            // 
+            this.allProjectsListBox.FormattingEnabled = true;
+            this.allProjectsListBox.Location = new System.Drawing.Point(12, 229);
+            this.allProjectsListBox.Name = "allProjectsListBox";
+            this.allProjectsListBox.Size = new System.Drawing.Size(169, 160);
+            this.allProjectsListBox.TabIndex = 9;
+            // 
+            // selectedProjectsListBox
+            // 
+            this.selectedProjectsListBox.FormattingEnabled = true;
+            this.selectedProjectsListBox.Location = new System.Drawing.Point(217, 229);
+            this.selectedProjectsListBox.Name = "selectedProjectsListBox";
+            this.selectedProjectsListBox.Size = new System.Drawing.Size(169, 160);
+            this.selectedProjectsListBox.TabIndex = 10;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(15, 199);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(87, 20);
+            this.label4.TabIndex = 11;
+            this.label4.Text = "All Projects";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(213, 199);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(133, 20);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "Selected Projects";
+            // 
+            // statusLabel
+            // 
+            this.statusLabel.AutoSize = true;
+            this.statusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.statusLabel.Location = new System.Drawing.Point(213, 403);
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(74, 25);
+            this.statusLabel.TabIndex = 13;
+            this.statusLabel.Text = "Status";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(398, 471);
+            this.ClientSize = new System.Drawing.Size(398, 486);
+            this.Controls.Add(this.statusLabel);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.selectedProjectsListBox);
+            this.Controls.Add(this.allProjectsListBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.workspacesDropdown);
             this.Controls.Add(this.selectFolderButton);
@@ -163,11 +220,16 @@
         private System.Windows.Forms.TextBox savePathTextBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.FolderBrowserDialog folderBrowser;
         private System.Windows.Forms.Button selectFolderButton;
         private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox workspacesDropdown;
+        private System.Windows.Forms.FolderBrowserDialog folderDialog;
+        private System.Windows.Forms.Label statusLabel;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ListBox selectedProjectsListBox;
+        private System.Windows.Forms.ListBox allProjectsListBox;
     }
 }
 

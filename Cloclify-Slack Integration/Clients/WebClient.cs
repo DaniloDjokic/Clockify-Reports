@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Cloclify_Slack_Integration.Interfaces;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Cloclify_Slack_Integration
 {
-    public class WebClient
+    public class WebClient : IWebClient
     {
         private HttpClient httpClient;
 
@@ -19,10 +21,11 @@ namespace Cloclify_Slack_Integration
 
         public void AddDefaultHeader(string headerName, string headerValue)
         {
-            this.httpClient.DefaultRequestHeaders.Add(headerName, headerValue);
+            if(!this.httpClient.DefaultRequestHeaders.Contains(headerName))
+                this.httpClient.DefaultRequestHeaders.Add(headerName, headerValue);
         }
 
-        public async Task<string> SendRequest(string httpMethod, string endpoint, Dictionary<string, string> headers = null, Dictionary<string, string> queryParams = null, dynamic body = null)
+        public async Task<T> SendRequest<T>(string httpMethod, string endpoint, Dictionary<string, string> headers = null, Dictionary<string, string> queryParams = null, dynamic body = null)
         {
             endpoint = CreateRoute(endpoint, queryParams);
 
@@ -36,7 +39,7 @@ namespace Cloclify_Slack_Integration
             HttpResponseMessage responseMessage = await httpClient.SendAsync(requestMessage);
 
             if(responseMessage.IsSuccessStatusCode)
-                return await responseMessage.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<T>(await responseMessage.Content.ReadAsStringAsync());
 
             throw new HttpRequestException(responseMessage.StatusCode.ToString());
         }
@@ -49,7 +52,7 @@ namespace Cloclify_Slack_Integration
 
                 foreach (KeyValuePair<string, string> pair in queryParams)
                 {
-                    endpoint += pair.Key + "=" + pair.Value;  
+                    endpoint += pair.Key + "=" + pair.Value + "&";  
                 }
             }
 

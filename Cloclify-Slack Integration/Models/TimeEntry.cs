@@ -9,6 +9,7 @@ namespace Cloclify_Slack_Integration
     public class TimeEntry
     {
         public string TaskId { get; set; }
+        public string ProjectId { get; set; }
         public string Description { get; set; }
         public TimeInterval TimeInterval { get; set; }
     }

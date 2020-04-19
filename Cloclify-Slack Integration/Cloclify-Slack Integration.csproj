@@ -49,31 +49,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClockifyService.cs" />
-    <Compile Include="InitApiKeyForm.cs">
+    <Compile Include="Interfaces\IClockifyService.cs" />
+    <Compile Include="Interfaces\IInitLogicProvider.cs" />
+    <Compile Include="Interfaces\IMainLogicProvider.cs" />
+    <Compile Include="Interfaces\IWebClient.cs" />
+    <Compile Include="Logic Providers\InitLogicProvider.cs" />
+    <Compile Include="Logic Providers\MainLogicProvider.cs" />
+    <Compile Include="Models\ClockifyProject.cs" />
+    <Compile Include="Services\ClockifyService.cs" />
+    <Compile Include="Models\ClockifyTask.cs" />
+    <Compile Include="Forms\InitApiKeyForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InitApiKeyForm.Designer.cs">
+    <Compile Include="Forms\InitApiKeyForm.Designer.cs">
       <DependentUpon>InitApiKeyForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IStartupKeyManager.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="Interfaces\IStartupKeyManager.cs" />
+    <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="Startup\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StartupKeyManager.cs" />
-    <Compile Include="TimeEntry.cs" />
-    <Compile Include="User.cs" />
-    <Compile Include="WebClient.cs" />
-    <Compile Include="Workspace.cs" />
-    <EmbeddedResource Include="InitApiKeyForm.resx">
+    <Compile Include="Startup\StartupKeyManager.cs" />
+    <Compile Include="Models\TimeEntry.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Clients\WebClient.cs" />
+    <Compile Include="Models\Workspace.cs" />
+    <EmbeddedResource Include="Forms\InitApiKeyForm.resx">
       <DependentUpon>InitApiKeyForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -86,7 +94,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="packages.config" />
+    <None Include="Startup\packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -98,7 +106,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="Startup\App.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\File Icon.png" />
@@ -106,5 +114,6 @@
   <ItemGroup>
     <None Include="Resources\folder-512.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -43,6 +43,7 @@ namespace Cloclify_Slack_Integration
                 using (BinaryWriter bw = new BinaryWriter(File.Open(fileName, FileMode.OpenOrCreate)))
                 {
                     bw.Write(apiKey);
+                    this.apiKey = apiKey;
                 }
 
                 return true;

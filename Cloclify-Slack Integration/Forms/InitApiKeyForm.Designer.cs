@@ -32,6 +32,7 @@
             this.keyInputTextBox = new System.Windows.Forms.TextBox();
             this.confirmButton = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.errorLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // keyInputTextBox
@@ -44,7 +45,7 @@
             // confirmButton
             // 
             this.confirmButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.confirmButton.Location = new System.Drawing.Point(171, 255);
+            this.confirmButton.Location = new System.Drawing.Point(12, 255);
             this.confirmButton.Name = "confirmButton";
             this.confirmButton.Size = new System.Drawing.Size(141, 60);
             this.confirmButton.TabIndex = 2;
@@ -64,11 +65,23 @@
             this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
             this.richTextBox1.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.richTextBox1_LinkClicked);
             // 
+            // errorLabel
+            // 
+            this.errorLabel.AutoSize = true;
+            this.errorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.errorLabel.ForeColor = System.Drawing.Color.DarkRed;
+            this.errorLabel.Location = new System.Drawing.Point(283, 255);
+            this.errorLabel.Name = "errorLabel";
+            this.errorLabel.Size = new System.Drawing.Size(198, 31);
+            this.errorLabel.TabIndex = 4;
+            this.errorLabel.Text = "Invalid API Key";
+            // 
             // InitApiKeyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(510, 327);
+            this.Controls.Add(this.errorLabel);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.confirmButton);
             this.Controls.Add(this.keyInputTextBox);
@@ -84,5 +97,6 @@
         private System.Windows.Forms.TextBox keyInputTextBox;
         private System.Windows.Forms.Button confirmButton;
         private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Label errorLabel;
     }
 }
