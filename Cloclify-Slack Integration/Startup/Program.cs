@@ -1,5 +1,6 @@
 ﻿using Cloclify_Slack_Integration.Interfaces;
 using Cloclify_Slack_Integration.Logic_Providers;
+using Cloclify_Slack_Integration.Startup;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,8 +32,9 @@ namespace Cloclify_Slack_Integration
             InitApiKeyForm initApiKeyForm = new InitApiKeyForm(initLogicProvider);
 
             IMainLogicProvider mainLogicProvider = new MainLogicProvider(startupKeyManager, clockifyService, initApiKeyForm);
+            IConfigManager configManager = new ConfigManager();
 
-            Application.Run(new MainForm(mainLogicProvider));
+            Application.Run(new MainForm(mainLogicProvider, configManager));
         }
     }
 }

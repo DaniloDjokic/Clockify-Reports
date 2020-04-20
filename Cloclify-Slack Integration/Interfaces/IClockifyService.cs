@@ -13,7 +13,7 @@ namespace Cloclify_Slack_Integration.Interfaces
         Task<string> GetUserNameAsync();
         Task<List<Workspace>> GetWorkspacesAsync();
         Task<List<TimeEntry>> GetDailyRecordAsync(Workspace workspace, DateTime startDate);
-        Task<List<ClockifyProject>> GetProjectsAsync(Workspace workspace, List<string> projectIds);
+        Task<List<ClockifyProject>> GetProjectsAsync(Workspace workspace, List<string> projectIds = null);
         Task<List<ClockifyProject>> GetProjectsWithTasksAsync(Workspace workspace, List<ClockifyProject> projects);
     }
 }

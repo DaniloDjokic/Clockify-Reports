@@ -99,19 +99,22 @@ namespace Cloclify_Slack_Integration
             }
         } 
 
-        public async Task<List<ClockifyProject>> GetProjectsAsync(Workspace workspace, List<string> projectIds)
+        public async Task<List<ClockifyProject>> GetProjectsAsync(Workspace workspace, List<string> projectIds = null)
         {
             string endpoint = $"workspaces/{workspace.Id}/projects";
-            List<ClockifyProject> allProjects = await this.webClient.SendRequest<List<ClockifyProject>>("GET", endpoint);
+            List<ClockifyProject> projects = await this.webClient.SendRequest<List<ClockifyProject>>("GET", endpoint);
 
-            List<ClockifyProject> activeProjectsForCurrentRecord = new List<ClockifyProject>();
-            foreach(ClockifyProject p in allProjects)
+            if(projectIds != null)
             {
-                if (projectIds.Contains(p.Id))
-                    activeProjectsForCurrentRecord.Add(p);
+                List<ClockifyProject> activeProjectsForCurrentRecord = new List<ClockifyProject>();
+                foreach (ClockifyProject p in projects)
+                {
+                    if (projectIds.Contains(p.Id))
+                        activeProjectsForCurrentRecord.Add(p);
+                }
             }
 
-            return activeProjectsForCurrentRecord;
+            return projects;
         }
 
         public async Task<List<ClockifyProject>> GetProjectsWithTasksAsync(Workspace workspace, List<ClockifyProject> projects)

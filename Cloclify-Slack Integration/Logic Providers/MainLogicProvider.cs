@@ -1,4 +1,5 @@
 ﻿using Cloclify_Slack_Integration.Interfaces;
+using Cloclify_Slack_Integration.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,14 +36,14 @@ namespace Cloclify_Slack_Integration.Logic_Providers
             return true;
         }
 
-        public async Task<Tuple<string, List<Workspace>>> GetUserDataAsync()
+        public async Task<UserData> GetUserDataAsync()
         {
             this.clockifyService.InitApiKey(this.startupKeyManager.ApiKey);
 
             return await GetUserDataParallelAsync();
         }
 
-        private async Task<Tuple<string, List<Workspace>>> GetUserDataParallelAsync()
+        private async Task<UserData> GetUserDataParallelAsync()
         {
             Task<string> usernameTask = Task.Run(() => this.clockifyService.GetUserNameAsync());
             Task<List<Workspace>> workspacesTask = Task.Run(() => this.clockifyService.GetWorkspacesAsync());
@@ -52,41 +53,38 @@ namespace Cloclify_Slack_Integration.Logic_Providers
             string username = usernameTask.Result;
             List<Workspace> workspaces = workspacesTask.Result;
 
-            return new Tuple<string, List<Workspace>>(username, workspaces);
+            return new UserData { UserName = username, Workspaces = workspaces };
         }
 
-        public async Task<List<ClockifyTask>> GetRecordAsync(Workspace workspace, DateTime startDate)
+        public async Task<List<ClockifyProject>> GetProjectsForWorkspace(Workspace workspace)
+        {
+            return await this.clockifyService.GetProjectsAsync(workspace);
+        }
+
+        public async Task<List<ClockifyTask>> GetRecordAsync(Workspace workspace, DateTime startDate, List<ClockifyProject> selectedProjects)
         {
             List<TimeEntry> timeEntries = await this.clockifyService.GetDailyRecordAsync(workspace, startDate);
-            Tuple<List<string>, List<string>> ids = this.FilterIds(timeEntries);
+            List<string> taskIds = this.FilterIds(timeEntries);
 
-            List<string> projectIds = ids.Item1;
-            List<string> taskIds = ids.Item2;
+            selectedProjects = await this.clockifyService.GetProjectsWithTasksAsync(workspace, selectedProjects);
 
-            List<ClockifyProject> allProjects = await this.clockifyService.GetProjectsAsync(workspace, projectIds);
-            allProjects = await this.clockifyService.GetProjectsWithTasksAsync(workspace, allProjects);
-
-            List<ClockifyTask> activeTasksForCurrentRecord = this.GetActiveTasksForCurrentRecord(taskIds, allProjects);
+            List<ClockifyTask> activeTasksForCurrentRecord = this.GetActiveTasksForCurrentRecord(taskIds, selectedProjects);
 
             List<ClockifyTask> calculatedTasks = CalculateTotalTaskTimes(timeEntries, activeTasksForCurrentRecord);
             return calculatedTasks;
         }
 
-        private Tuple<List<string>, List<string>> FilterIds(List<TimeEntry> entries)
+        private List<string> FilterIds(List<TimeEntry> entries)
         {
-            List<string> projectIds = new List<string>();
             List<string> taskIds = new List<string>();
 
             foreach (TimeEntry e in entries)
             {
-                if (!projectIds.Contains(e.ProjectId))
-                    projectIds.Add(e.ProjectId);
-
                 if (!taskIds.Contains(e.TaskId))
                     taskIds.Add(e.TaskId);
             }
 
-            return new Tuple<List<string>, List<string>>(projectIds, taskIds);
+            return taskIds;
         }
 
         private List<ClockifyTask> GetActiveTasksForCurrentRecord(List<string> taskIds, List<ClockifyProject> projects)
@@ -123,11 +121,17 @@ namespace Cloclify_Slack_Integration.Logic_Providers
         }
 
         public void LogRecord(List<ClockifyTask> tasks, DateTime date, string path)
-        {
+        { 
             string fileName = date.ToString("dd-MM-yyyy");
 
             using (StreamWriter sw = new StreamWriter(path + "/" + fileName + ".txt"))
             {
+                if(tasks.Count == 0)
+                {
+                    sw.WriteLine("No time entries for selected projects...");
+                    return;
+                }
+
                 foreach (ClockifyTask task in tasks)
                 {
                     sw.Write(task.Name + ":  " + task.TotalTime.ToString() + "\n");

@@ -53,9 +53,9 @@
             this.getRecordsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.getRecordsButton.Location = new System.Drawing.Point(12, 403);
             this.getRecordsButton.Name = "getRecordsButton";
-            this.getRecordsButton.Size = new System.Drawing.Size(169, 71);
+            this.getRecordsButton.Size = new System.Drawing.Size(204, 71);
             this.getRecordsButton.TabIndex = 0;
-            this.getRecordsButton.Text = "Get Records";
+            this.getRecordsButton.Text = "Get Report";
             this.getRecordsButton.UseVisualStyleBackColor = true;
             this.getRecordsButton.Click += new System.EventHandler(this.getRecordsButton_Click);
             // 
@@ -71,14 +71,14 @@
             // 
             // datePicker
             // 
-            this.datePicker.Location = new System.Drawing.Point(136, 115);
+            this.datePicker.Location = new System.Drawing.Point(199, 114);
             this.datePicker.Name = "datePicker";
             this.datePicker.Size = new System.Drawing.Size(250, 20);
             this.datePicker.TabIndex = 2;
             // 
             // savePathTextBox
             // 
-            this.savePathTextBox.Location = new System.Drawing.Point(136, 157);
+            this.savePathTextBox.Location = new System.Drawing.Point(199, 157);
             this.savePathTextBox.Name = "savePathTextBox";
             this.savePathTextBox.ReadOnly = true;
             this.savePathTextBox.Size = new System.Drawing.Size(214, 20);
@@ -108,7 +108,7 @@
             // 
             this.selectFolderButton.BackgroundImage = global::Cloclify_Slack_Integration.Properties.Resources.folder_512;
             this.selectFolderButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.selectFolderButton.Location = new System.Drawing.Point(356, 157);
+            this.selectFolderButton.Location = new System.Drawing.Point(419, 157);
             this.selectFolderButton.Name = "selectFolderButton";
             this.selectFolderButton.Size = new System.Drawing.Size(30, 20);
             this.selectFolderButton.TabIndex = 6;
@@ -122,10 +122,11 @@
             // workspacesDropdown
             // 
             this.workspacesDropdown.FormattingEnabled = true;
-            this.workspacesDropdown.Location = new System.Drawing.Point(136, 71);
+            this.workspacesDropdown.Location = new System.Drawing.Point(199, 69);
             this.workspacesDropdown.Name = "workspacesDropdown";
             this.workspacesDropdown.Size = new System.Drawing.Size(250, 21);
             this.workspacesDropdown.TabIndex = 7;
+            this.workspacesDropdown.SelectedIndexChanged += new System.EventHandler(this.workspacesDropdown_SelectedIndexChanged_1);
             // 
             // label3
             // 
@@ -142,22 +143,24 @@
             this.allProjectsListBox.FormattingEnabled = true;
             this.allProjectsListBox.Location = new System.Drawing.Point(12, 229);
             this.allProjectsListBox.Name = "allProjectsListBox";
-            this.allProjectsListBox.Size = new System.Drawing.Size(169, 160);
+            this.allProjectsListBox.Size = new System.Drawing.Size(204, 160);
             this.allProjectsListBox.TabIndex = 9;
+            this.allProjectsListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.allProjectsListBox_MouseDoubleClick);
             // 
             // selectedProjectsListBox
             // 
             this.selectedProjectsListBox.FormattingEnabled = true;
-            this.selectedProjectsListBox.Location = new System.Drawing.Point(217, 229);
+            this.selectedProjectsListBox.Location = new System.Drawing.Point(243, 229);
             this.selectedProjectsListBox.Name = "selectedProjectsListBox";
-            this.selectedProjectsListBox.Size = new System.Drawing.Size(169, 160);
+            this.selectedProjectsListBox.Size = new System.Drawing.Size(206, 160);
             this.selectedProjectsListBox.TabIndex = 10;
+            this.selectedProjectsListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.selectedProjectsListBox_MouseDoubleClick);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(15, 199);
+            this.label4.Location = new System.Drawing.Point(8, 199);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(87, 20);
             this.label4.TabIndex = 11;
@@ -167,7 +170,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(213, 199);
+            this.label5.Location = new System.Drawing.Point(255, 199);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(133, 20);
             this.label5.TabIndex = 12;
@@ -175,20 +178,20 @@
             // 
             // statusLabel
             // 
-            this.statusLabel.AutoSize = true;
             this.statusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.statusLabel.Location = new System.Drawing.Point(213, 403);
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(74, 25);
+            this.statusLabel.Size = new System.Drawing.Size(236, 71);
             this.statusLabel.TabIndex = 13;
             this.statusLabel.Text = "Status";
+            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(398, 486);
+            this.ClientSize = new System.Drawing.Size(461, 498);
             this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -203,9 +206,11 @@
             this.Controls.Add(this.datePicker);
             this.Controls.Add(this.usernameLabel);
             this.Controls.Add(this.getRecordsButton);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainForm";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

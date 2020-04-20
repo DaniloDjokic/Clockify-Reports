@@ -11,5 +11,10 @@ namespace Cloclify_Slack_Integration
         public string Id { get; set; }
         public string Name { get; set; }
         public List<ClockifyTask> Tasks { get; set; }
+
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }
