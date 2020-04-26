@@ -1,4 +1,4 @@
-# Clockify-Slack-Integration
+# Clockify-Reports
 
 This tool is designed to compile daily reports of Cloclify activity. 
 Select the projects you want, and you can generate a file with the information on how much
